@@ -1,0 +1,54 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+{% block content %}
+      <main>
+
+        <div class="container">
+          <div class="row align-items-center" style="margin-top: 15%">
+           {% for message in messages %}
+           <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+               {{ message }}.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+            </div>
+           {% endfor %}
+            <div class="col-4 text-center">
+              <h2>Йога. Медитация.</h2>
+              <h2>Здоровый образ жизни.</h2>
+              <p class="mt-5" style="font-size: 18px">Специальная цена на первое занятие <b>500 рублей</b></p>
+                 <button class="btn btn-outline-dark mt-5 btn-lg" data-bs-toggle="modal" data-bs-target="#exampleModal" style="font-size: 18px">Записаться на занятие</button>
+            </div>
+            <div class="col-8">
+              {% include 'crm/carousel.html' %}
+            </div>
+          </div>
+        </div>
+
+      <!--Корусель-->
+          {% block phone_error %}
+
+      {% endblock %}
+        <div class="container" style="margin-top: 10%">
+            <div class="row my-5">
+                <div class="col-md-5 col-sm-12">
+                  <img class="w-100" src="{% static 'crm/img/about.webp' %}" alt="">
+                </div>
+                <div class="col-md-7 text-center col-sm-12">
+                  <h2 class="my-3">О нас</h2>
+                  <p style="font-size: 18px">
+                    Светлое лофт-пространство, внимание к деталям и профессиональная команда создают домашний уют и настраивают на качественную практику.
+Мы всегда рады неформальному общению до и после класса и приглашаем задать вопросы преподавателям и администраторам или поделиться впечатлениями с другими гостями за чашкой ароматного травяного чая. Djagriti – это место, где вы можете надежно укрыться от городской суеты и восстановить жизненную энергию.
+                  </p>
+                </div>
+            </div>
+            <h2 class="text-center my-5">Направления студии</h2>
+            <div class="row gy-5">
+                {% for n in napr %}
+              <div class="col-md-4 col-sm-6 text-center">
+                <h4 class="my-3">{{ n.Description }}</h4>
+                <img src="data:image/gif;base64,{{ n.Изображение_Base64Data }}" class="w-75 my-3">
+                <p>{{ n.Описание }}</p>
+              </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}

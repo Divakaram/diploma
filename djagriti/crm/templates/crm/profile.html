@@ -1,0 +1,10 @@
+{% extends 'crm/base.html' %}
+{% load static %}
+{% block content %}
+    <div style="margin-top: 10%">
+        <p>{{ user_data.Description }}</p>
+        <p>{{ user_data.Телефон }}</p>
+        <p>{{ user_data.Баланс }}</p>
+        <p>{{ user_data.ВидЧленства.Description }}</p>
+    </div>
+{% endblock %}

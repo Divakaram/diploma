@@ -1,0 +1,67 @@
+import phonenumbers
+from django import forms
+from django.contrib.auth.models import User
+from crm.models import *
+
+
+class OrderForm(forms.ModelForm):
+    # def __int__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['order_napr'].empty_label = "ВЛвллв"
+
+    class Meta:
+        model = Order
+        fields = ['order_name', 'order_phone', 'order_napr', 'order_price', 'date']
+        widgets = {
+            'order_name': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Имя', 'pattern': '^[А-Яа-яЁё\s]+$',
+                       "title": "Только кириллические символы"}),
+            'order_phone': forms.TextInput(
+                attrs={'type': 'tel', 'class': 'form-control', 'placeholder': 'Номер телефона'}),
+            'order_napr': forms.Select(attrs={'class': 'form-select'}),
+            'order_price': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.TextInput(attrs={'class': 'form-select', 'placeholder': 'Дата и время'})
+        }
+
+    def clean_order_phone(self):
+        phone_number = self.cleaned_data.get("order_phone")
+        z = phonenumbers.parse(phone_number)
+        if not phonenumbers.is_valid_number(z):
+            raise forms.ValidationError("Такого номера телефона не существует")
+        return phone_number
+
+
+class PriceForm(forms.ModelForm):
+    class Meta:
+        model = Price
+        fields = ['price_name', 'price_value']
+        widgets = {
+            'price_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}),
+            'price_value': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Стоимость'}),
+        }
+
+
+class NaprForm(forms.ModelForm):
+    class Meta:
+        model = NaprCrm
+        fields = "__all__"
+        widgets = {
+            'napr_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Название'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Описание'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'})
+        }
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Логин'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'})
+        }
+
+
+class AuthForm(forms.Form):
+    phone = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Номер телефона'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Пароль'}))
